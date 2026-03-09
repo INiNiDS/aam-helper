@@ -1,39 +1,50 @@
-# aam-helper
+# AAM Helper
 
-Support for the AAML format in Visual Studio Code. This extension provides syntax highlighting, real-time validation, and quick fixes for `.aam` configuration files.
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Marketplace](https://img.shields.io/vscode-marketplace/v/ininids.aam-helper.svg)](https://marketplace.visualstudio.com/items?itemName=ininids.aam-helper)
+
+Support for the AAM language format in Visual Studio Code. This extension provides syntax highlighting, language server features, and other utilities to enhance your experience when working with `.aam` files.
 
 ## Features
 
-### Syntax Highlighting
-Automatically highlights syntax for `.aam` files.
-- **Keys**: Alphanumeric keys are color-coded.
-- **Values**: Supports both quoted and unquoted values.
-- **Comments**: Highlights lines starting with `#` as comments.
+- **Syntax Highlighting:** Full syntax highlighting for AAM language files.
+- **Auto-completion:** Smart autocompletion for elements and keywords based on the AAM language specification.
+- **Formatting:** Built-in formatter for `.aam` files to maintain code consistency.
+- **Linting:** Automatic linting to detect syntax errors and potential formatting issues.
+- **Language Server Integration:** Powerful language intelligence for rapid development.
 
-### Diagnostics (Linting)
-The extension validates your document in real-time and reports errors for:
-- **Missing Assignment**: Lines missing the `=` operator.
-- **Missing Key/Value**: Lines where the key or value is empty.
-- **Invalid Characters**:
-  - Keys can only contain alphanumerics, underscores, and spaces.
-  - Values can only contain alphanumerics, underscores, spaces, quotes, and hashes.
+## Installation
 
-### Quick Fixes
-Code Actions are provided to automatically fix detected issues:
-- **Add '='**: Inserts a missing assignment operator after the first word.
-- **Clean Key**: Removes invalid characters from keys.
-- **Clean Value**: Removes invalid characters from values.
+1. Open Visual Studio Code.
+2. Go to the Extensions view (`Ctrl+Shift+X` or `Cmd+Shift+X`).
+3. Search for `aam-helper`.
+4. Click Install.
 
-## Extension Settings
+Alternatively, you can build the extension from source:
 
-This extension currently does not contribute any specific settings.
+```bash
+git clone https://github.com/ininids/aam-helper.git
+cd aam-helper
+pnpm install
+pnpm run compile
+```
 
-## Release Notes
+Then, open the folder in VS Code and press `F5` to run the extension in a new Extension Development Host window.
 
-### 0.0.1
+## Usage
 
-Initial release with basic support:
-- AAML language support (`.aam`).
-- Syntax highlighting via TextMate grammar.
-- Diagnostic collection for format validation.
-- Quick Fix providers for common syntax errors.
+Simply open any `.aam` file to activate the extension. Language support will be automatically applied. 
+
+## Contributing
+
+Contributions are welcome! Please read the [Contributing Guidelines](CONTRIBUTING.md) to get started.
+
+### Setting up the development environment
+
+- `pnpm install` - Install dependencies
+- `pnpm run compile` - Compile the TypeScript code
+- `pnpm run watch` - Watch for changes and recompile
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).

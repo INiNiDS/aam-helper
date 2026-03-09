@@ -1,31 +1,149 @@
 {
-    "scopeName": "source.aam",
-    "patterns": [
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "aam",
+  "scopeName": "source.aam",
+  "patterns": [
+    { "include": "#comments" },
+    { "include": "#directives" },
+    { "include": "#brackets" },
+    { "include": "#schema-fields" },
+    { "include": "#assignments" },
+    { "include": "#legacy-key-value" }
+  ],
+  "repository": {
+    "brackets": {
+      "patterns": [
         {
-            "match": "#.*$",
-            "name": "comment.line.number-sign.aam"
-        },
-        {
-            "comment": "Key-Value pair with quoted value",
-            "match": "^\\s*([a-zA-Z0-9_\\s]+)\\s*(=)\\s*(\"[^\"]*\")",
-            "captures": {
-                "1": { "name": "variable.other.key.aam" },
-                "2": { "name": "keyword.operator.assignment.aam" },
-                "3": { "name": "string.quoted.double.value.aam" }
-            }
-        },
-        {
-            "comment": "Key-Value pair with unquoted value (allows spaces and #)",
-            "match": "^\\s*([a-zA-Z0-9_\\s]+)\\s*(=)\\s*([a-zA-Z0-9_\\s\"'#]+)",
-            "captures": {
-                "1": { "name": "variable.other.key.aam" },
-                "2": { "name": "keyword.operator.assignment.aam" },
-                "3": { "name": "string.unquoted.value.aam" }
-            }
-        },
-        {
-            "match": "=",
-            "name": "keyword.operator.assignment.aam"
+          "match": "\\{|\\}",
+          "name": "punctuation.definition.block.aam"
         }
-    ]
+      ]
+    },
+    "comments": {
+      "patterns": [
+        {
+          "name": "comment.line.number-sign.aam",
+          "match": "#.*$"
+        },
+        {
+          "name": "invalid.illegal.bad-comment.aam",
+          "match": "(?<=^|[ \\t\\xA0])//.*$"
+        }
+      ]
+    },
+    "directives": {
+      "patterns": [
+        {
+          "match": "^[ \\t\\xA0]*(@import)\\s+(\"[^\"]*\")",
+          "captures": {
+            "1": { "name": "keyword.control.directive.aam" },
+            "2": { "name": "string.quoted.double.aam" }
+          }
+        },
+        {
+          "comment": "Специальное правило для @type Name = Type",
+          "match": "^[ \\t\\xA0]*(@type)\\s+([a-zA-Z0-9_\\-\\.:]+)[ \\t\\xA0]*(=)[ \\t\\xA0]*([a-zA-Z0-9_<>]+)",
+          "captures": {
+            "1": { "name": "keyword.control.directive.aam" },
+            "2": { "name": "entity.name.type.aam" },
+            "3": { "name": "keyword.operator.assignment.aam" },
+            "4": { "name": "support.type.aam" }
+          }
+        },
+        {
+          "comment": "Правило для @schema и @derive",
+          "match": "^[ \\t\\xA0]*(@schema|@derive)\\s+([a-zA-Z0-9_\\-\\.:]+)",
+          "captures": {
+            "1": { "name": "keyword.control.directive.aam" },
+            "2": { "name": "entity.name.class.aam" }
+          }
+        },
+        {
+          "name": "keyword.control.directive.aam",
+          "match": "@(import|schema|derive|type)\\b"
+        }
+      ]
+    },
+    "schema-fields": {
+      "patterns": [
+        {
+          "match": "^[ \\t\\xA0]*([a-zA-Z0-9_\\-]+(?:\\*)?)[ \\t\\xA0]*(:)[ \\t\\xA0]*([a-zA-Z0-9_<>]+)",
+          "captures": {
+            "1": { "name": "variable.other.property.aam" },
+            "2": { "name": "keyword.operator.assignment.aam" },
+            "3": { "name": "support.type.aam" }
+          }
+        }
+      ]
+    },
+    "legacy-key-value": {
+      "patterns": [
+        {
+          "comment": "Key-Value pair with quoted value",
+          "match": "^[ \\t\\xA0]*([a-zA-Z0-9_\\s]+?)[ \\t\\xA0]*(=)[ \\t\\xA0]*(\"[^\"]*\")",
+          "captures": {
+              "1": { "name": "variable.other.key.aam" },
+              "2": { "name": "keyword.operator.assignment.aam" },
+              "3": { "name": "string.quoted.double.value.aam" }
+          }
+        },
+        {
+          "comment": "Key-Value pair with unquoted value",
+          "match": "^[ \\t\\xA0]*([a-zA-Z0-9_\\s]+?)[ \\t\\xA0]*(=)[ \\t\\xA0]*(.*?)(?=[ \\t\\xA0]*#|$)",
+          "captures": {
+              "1": { "name": "variable.other.key.aam" },
+              "2": { "name": "keyword.operator.assignment.aam" },
+              "3": { "name": "string.unquoted.value.aam" }
+          }
+        },
+        {
+          "match": "=",
+          "name": "keyword.operator.assignment.aam"
+        }
+      ]
+    },
+    "assignments": {
+      "patterns": [
+        {
+          "match": "^[ \\t\\xA0]*([a-zA-Z0-9_\\-]+)[ \\t\\xA0]*(=)[ \\t\\xA0]*(.*?)(?=[ \\t\\xA0]*#|$)",
+          "captures": {
+            "1": { "name": "variable.other.aam" },
+            "2": { "name": "keyword.operator.assignment.aam" },
+            "3": {
+               "patterns": [
+                 { "include": "#values" }
+               ]
+            }
+          }
+        }
+      ]
+    },
+    "values": {
+      "patterns": [
+        {
+          "name": "string.quoted.double.aam",
+          "begin": "\"",
+          "end": "\"",
+          "patterns": [
+            {
+              "name": "constant.character.escape.aam",
+              "match": "\\\\."
+            }
+          ]
+        },
+        {
+          "name": "constant.numeric.aam",
+          "match": "\\b[0-9]+(?:\\.[0-9]+)?\\b"
+        },
+        {
+          "name": "constant.language.boolean.aam",
+          "match": "\\b(true|false)\\b"
+        },
+        {
+          "name": "variable.other.alias.aam",
+          "match": "\\b[a-zA-Z0-9_\\-]+\\b"
+        }
+      ]
+    }
+  }
 }

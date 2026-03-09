@@ -1,0 +1,8 @@
+@type WPx = i32
+@type HPx = i32
+@type WindowMode = string # "fullscreen", "windowed", "borderless"
+
+@schema GameSettings {
+    resolution: Resolution
+    window_mode: WindowMode
+}

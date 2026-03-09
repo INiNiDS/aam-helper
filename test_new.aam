@@ -1,5 +1,6 @@
+@import ./file.aam
 valid_key=valid_value
-missing_equals =  default_value
+missing_equals = default_value
 missing_key=missing_key
 missing_value=default_value
 spaced key = value
