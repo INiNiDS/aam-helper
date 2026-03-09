@@ -392,7 +392,12 @@ export function activate(context: vscode.ExtensionContext) {
     const completionProvider = vscode.languages.registerCompletionItemProvider('aam', {
         provideCompletionItems(document: vscode.TextDocument, position: vscode.Position) {
             const completionItems: vscode.CompletionItem[] = [];
-            const wordRange = document.getWordRangeAtPosition(position, /@?[a-zA-Z0-9_:]+/);
+            let wordRange = document.getWordRangeAtPosition(position, /@?[a-zA-Z0-9_:]+/);
+            
+            const linePrefix = document.lineAt(position).text.substring(0, position.character);
+            if (!wordRange && linePrefix.endsWith('@')) {
+                wordRange = new vscode.Range(position.translate(0, -1), position);
+            }
 
             // Keywords
             const keywords = ['@import', '@schema', '@type', '@derive'];
@@ -410,65 +415,65 @@ export function activate(context: vscode.ExtensionContext) {
                 'string', 'int', 'boolean', 'float',
                 
                 // Base SI Units
-                'meter', 'kilogram', 'second', 'ampere', 'kelvin', 'mole', 'candela',
+                'types::physics::meter', 'types::physics::kilogram', 'types::physics::second', 'types::physics::ampere', 'types::physics::kelvin', 'types::physics::mole', 'types::physics::candela',
                 
                 // Mechanics
-                'squaremeter', 'cubicmeter', 'meterpersecond', 'meterpersecondsquared',
-                'radianpersecond', 'radianpersecondsquared', 'hertz', 'kilogrampercubicmeter',
-                'kilogrammeterpersecond', 'newton', 'newtonmeter', 'pascal', 'joule', 'watt',
-                'newtonpermeter', 'kilogramsquaremeter', 'newtonsecond', 'newtonpercubicmeter',
-                'joulesecond', 'meterpercubicsecond', 'radian', 'steradian', 'dimensionless',
-                'kilogrampersecond', 'cubicmeterpersecond', 'newtonpermetersquared',
+                'types::physics::squaremeter', 'types::physics::cubicmeter', 'types::physics::meterpersecond', 'types::physics::meterpersecondsquared',
+                'types::physics::radianpersecond', 'types::physics::radianpersecondsquared', 'types::physics::hertz', 'types::physics::kilogrampercubicmeter',
+                'types::physics::kilogrammeterpersecond', 'types::physics::newton', 'types::physics::newtonmeter', 'types::physics::pascal', 'types::physics::joule', 'types::physics::watt',
+                'types::physics::newtonpermeter', 'types::physics::kilogramsquaremeter', 'types::physics::newtonsecond', 'types::physics::newtonpercubicmeter',
+                'types::physics::joulesecond', 'types::physics::meterpercubicsecond', 'types::physics::radian', 'types::physics::steradian', 'types::physics::dimensionless',
+                'types::physics::kilogrampersecond', 'types::physics::cubicmeterpersecond', 'types::physics::newtonpermetersquared',
                 
                 // Thermodynamics
-                'jouleperkilogramkelvin', 'jouleperkilogram', 'jouleperkelvin', 'wattpermeterkelvin',
-                'kelvinperwatt', 'voltperkelvin', 'celsius', 'fahrenheit', 'rankine', 'calorie',
-                'britishthermalunit', 'langley',
+                'types::physics::jouleperkilogramkelvin', 'types::physics::jouleperkilogram', 'types::physics::jouleperkelvin', 'types::physics::wattpermeterkelvin',
+                'types::physics::kelvinperwatt', 'types::physics::voltperkelvin', 'types::physics::celsius', 'types::physics::fahrenheit', 'types::physics::rankine', 'types::physics::calorie',
+                'types::physics::britishthermalunit', 'types::physics::langley',
                 
                 // Electromagnetism
-                'coulomb', 'volt', 'ohm', 'ohmmeter', 'farad', 'voltpermeter', 'tesla', 'weber',
-                'henry', 'siemens', 'coulombpercubicmeter', 'coulombpersquaremeter', 'faradpermeter',
-                'henrypermeter', 'amperepermeter', 'amperepersquaremeter', 'newtonpercoulomb',
-                'weberpermeter', 'teslasquaremeter', 'gauss', 'oersted', 'maxwell', 'gilbert',
-                'franklin', 'debye',
+                'types::physics::coulomb', 'types::physics::volt', 'types::physics::ohm', 'types::physics::ohmmeter', 'types::physics::farad', 'types::physics::voltpermeter', 'types::physics::tesla', 'types::physics::weber',
+                'types::physics::henry', 'types::physics::siemens', 'types::physics::coulombpercubicmeter', 'types::physics::coulombpersquaremeter', 'types::physics::faradpermeter',
+                'types::physics::henrypermeter', 'types::physics::amperepermeter', 'types::physics::amperepersquaremeter', 'types::physics::newtonpercoulomb',
+                'types::physics::weberpermeter', 'types::physics::teslasquaremeter', 'types::physics::gauss', 'types::physics::oersted', 'types::physics::maxwell', 'types::physics::gilbert',
+                'types::physics::franklin', 'types::physics::debye',
                 
                 // Optics & Photometry
-                'dioptre', 'lumen', 'lux', 'lumensecond', 'candelapersquaremeter', 'wattpersteradian',
-                'wattpersquaremeter', 'joulepersquaremeter', 'lambert', 'phot', 'stilb', 'kayser', 'jansky',
+                'types::physics::dioptre', 'types::physics::lumen', 'types::physics::lux', 'types::physics::lumensecond', 'types::physics::candelapersquaremeter', 'types::physics::wattpersteradian',
+                'types::physics::wattpersquaremeter', 'types::physics::joulepersquaremeter', 'types::physics::lambert', 'types::physics::phot', 'types::physics::stilb', 'types::physics::kayser', 'types::physics::jansky',
                 
                 // Chemistry & Molar Quantities
-                'kilogrampermole', 'cubicmeterperkilogram', 'joulepermole', 'joulepermolekelvin',
-                'molepercubicmeter', 'katal',
+                'types::physics::kilogrampermole', 'types::physics::cubicmeterperkilogram', 'types::physics::joulepermole', 'types::physics::joulepermolekelvin',
+                'types::physics::molepercubicmeter', 'types::physics::katal',
                 
                 // Radiation & Nuclear Physics
-                'becquerel', 'gray', 'sievert', 'electronvolt', 'barn', 'curie', 'roentgen',
-                'rutherford', 'fermi', 'dalton', 'atomicmassunit',
+                'types::physics::becquerel', 'types::physics::gray', 'types::physics::sievert', 'types::physics::electronvolt', 'types::physics::barn', 'types::physics::curie', 'types::physics::roentgen',
+                'types::physics::rutherford', 'types::physics::fermi', 'types::physics::dalton', 'types::physics::atomicmassunit',
                 
                 // Astronomy
-                'lightyear', 'parsec', 'astronomicalunit', 'hubbleconstant', 'angstrom',
+                'types::physics::lightyear', 'types::physics::parsec', 'types::physics::astronomicalunit', 'types::physics::hubbleconstant', 'types::physics::angstrom',
                 
                 // Fluid Dynamics & Pressure
-                'pascalsecond', 'squaremeterpersecond', 'bar', 'millimeterofmercury', 'atmosphere',
-                'torr', 'poise', 'stokes', 'sverdrup', 'rayl', 'gal',
+                'types::physics::pascalsecond', 'types::physics::squaremeterpersecond', 'types::physics::bar', 'types::physics::millimeterofmercury', 'types::physics::atmosphere',
+                'types::physics::torr', 'types::physics::poise', 'types::physics::stokes', 'types::physics::sverdrup', 'types::physics::rayl', 'types::physics::gal',
                 
                 // Angles
-                'arcdegree', 'arcminute', 'arcsecond', 'inversemeter',
+                'types::physics::arcdegree', 'types::physics::arcminute', 'types::physics::arcsecond', 'types::physics::inversemeter',
                 
                 // Navigation & Speed
-                'knots', 'nauticalmile', 'machnumber',
+                'types::physics::knots', 'types::physics::nauticalmile', 'types::physics::machnumber',
                 
                 // Information & Communication
-                'bit', 'byte', 'decibel', 'baud', 'erlang',
+                'types::physics::bit', 'types::physics::byte', 'types::physics::decibel', 'types::physics::baud', 'types::physics::erlang',
                 
                 // Miscellaneous
-                'percentage', 'horsepower', 'metabolicequivalent',
+                'types::physics::percentage', 'types::physics::horsepower', 'types::physics::metabolicequivalent',
                 
                 // Physics Types
                 'types::physics::vector2', 'types::physics::vector3', 'types::physics::vector4',
                 'types::physics::quaternion', 'types::physics::matrix3x3', 'types::physics::matrix4x4',
                 
                 // Time Types
-                'datetime', 'duration', 'year', 'day', 'hour', 'minute'
+                'types::time::datetime', 'types::time::duration', 'types::time::year', 'types::time::day', 'types::time::hour', 'types::time::minute'
             ];
             
             types.forEach(type => {

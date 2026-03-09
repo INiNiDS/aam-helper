@@ -15,7 +15,7 @@ importers:
         specifier: 22.x
         version: 22.19.11
       '@types/vscode':
-        specifier: ^1.109.0
+        specifier: ^1.107.0
         version: 1.109.0
       '@vscode/test-cli':
         specifier: ^0.0.12
@@ -35,6 +35,9 @@ importers:
       typescript-eslint:
         specifier: ^8.54.0
         version: 8.55.0(eslint@9.39.2)(typescript@5.9.3)
+      underscore:
+        specifier: ^1.13.8
+        version: 1.13.8
 
 packages:
 

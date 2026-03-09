@@ -4,7 +4,7 @@
   "description": "Support for AAML format",
   "repository": "https://github.com/ininids/aam-helper",
   "publisher": "ininids",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "engines": {
     "vscode": "^1.107.0"
   },
@@ -61,6 +61,7 @@
     "eslint": "^9.39.2",
     "ovsx": "^0.10.9",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.54.0"
+    "typescript-eslint": "^8.54.0",
+    "underscore": "^1.13.8"
   }
 }
